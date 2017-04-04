@@ -1,174 +1,169 @@
 <template>
   <q-layout>
-    <div slot="header" class="toolbar">
+    <div slot="header"
+         class="toolbar">
       <q-toolbar-title :padding="1">
-       Orb Solution Todo List
+        Orb Solution Todo List
       </q-toolbar-title>
       <button @click="add">
         <i>note_add</i>
       </button>
     </div>
-
+  
     <div class="layout-view">
-
-      <q-search v-model="searchModel"></q-search>
-      <div>{{recCount}}</div>
       <div class="list">
-        <div :id="'test'+item._id" v-for="(item, index) in filteredTasks()" class="item">
+        <div v-for="i in filteredTasks()" :key="i.id"
+          class="item">
 
           <i class="item-primary">lightbulb_outline</i>
           <div class="item-content has-secondary">
-            <div>{{item.label}}</div>
+            <div>{{i.title}}</div>
           </div>
-
-          
+  
           <div class="item-secondary">
             <i slot="target">
-              more_vert
-              <q-popover  :ref="'popover'">
-                <div class="list">
-
-                  <div class="item item-link" @click="edit(index)">
-                    <div class="item-content">Edit</div>
+                more_vert
+                <q-popover :ref="'popover'">
+                  <div class="list">
+                    <div class="item item-link" @click="edit(i.id)">
+                      <div class="item-content">Edit</div>
+                    </div>
+                    <div class="item item-link" @click="deleteItem(i.id)">
+                      <div class="item-content">Delete</div>
+                    </div>
                   </div>
-                  <div class="item item-link" @click="deleteItem(index)">
-                    <div class="item-content">Delete</div>
-                  </div>
-                </div>
-              </q-popover>
-            </i>
+                </q-popover>
+              </i>
           </div>
-
-
-
         </div>
-      
       </div>
-
     </div>
-    
   </q-layout>
 </template>
 
 <script>
-  import _ from 'lodash'
-  import Quasar, { Utils, Dialog, LocalStorage} from 'quasar'
+import _ from 'lodash'
+import Quasar, { Utils, Dialog } from 'quasar'
 
-  export default {
-    data() {
-      return {
-        searchModel: "",
-        recCount: 0,
-         AllItem: "",
-        
-        
-      }
-    },
+var lastCount = 0 
+function counter () {
+  lastCount += 1
+  return lastCount
+}
 
-    
-    methods: {
-      filteredTasks() {
-        var tasks = LocalStorage.get.item('taskList')
-        if (this.searchModel.length > 0) {
-          console.log("taskList")
-          retv = _.filter(tasks, {label: this.searchModel})
-          this.recCount = retv.length
-            
-          return retv
-        }
-
-        console.log("yello")
-
-        this.recCount = tasks.length
-        return tasks
-
-      },
-
-      add() {
-        var self = this
-        Dialog.create({
-          title: 'New task',
-          form: {
-            task: {
-              type: 'textbox',
-              label: 'My task',
-              model: ''
-            }
-          },
-         
-          buttons: [
-            'Delete',
-            {
-              label: 'Create',
-
-              handler(data) {
-                  var alltask = LocalStorage.get.item('taskList');
-                  (alltask==0) ? alltask = [] : ''
-                  console.log(alltask)
-                  alltask.push({label: data.task})
-                  LocalStorage.set('taskList',alltask)
-                  self.recCount += 1
-              }
-            }
-          ]
-        })
-      
-      },
-       
-    
-    edit(index) {
-     this.$refs.popover[0].close(index);
-     
-        var self = this
-        Dialog.create({
-          title: 'New task',
-          form: {
-            task: {
-              type: 'textbox',
-              label: 'Edit Task',
-              model:index
-            }
-          },
-         
-          buttons: [
-            'Delete',
-            {
-              label: 'Create',
-              handler(data) {
-                console.log(data)
-                
-                var edittask = LocalStorage.get.item('taskList');
-                  (edittask==0) ? edittask = [] : ''
-                  console.log(edittask)
-                  edittask.push({label: data.task})
-                  LocalStorage.set('taskList',edittask)
-                  self.recCount += 1
-              }
-            }
-          ]
-        })
-      },
-       
-    
-
-     deleteItem(index) {
-              
-               var self = this
-              this.$refs.popover[0].close(index);
-            
-             LocalStorage.remove(index)
-              LocalStorage.set('taskList',index)
-            
-                self.recCount +=1
-            }
-    },
-
-    mounted() {
-      // create task store if not exist
-      if (LocalStorage.has('taskList') === false) {
-        LocalStorage.set('taskList', [])
-      }
+export default {
+  data() {
+    return {
+      search: '',
+      taskList: [],
     }
+  },
+
+
+  methods: {
+    filteredTasks() {
+      if (this.search.length > 0) {
+        retv = _.filter(this.taskList, { label: this.searchModel })
+        return retv
+      }
+
+      return this.taskList
+    },
+
+    add() {
+      var self = this
+      Dialog.create({
+        title: 'New task',
+        form: {
+          task: {
+            type: 'textbox',
+            label: 'My task',
+            model: ''
+          }
+        },
+
+        buttons: [
+          'Delete',
+          {
+            label: 'Create',
+            handler(data) {
+
+              if(data.task == 0){
+                alert("Warning!!!...You are trying to submit an empty field")
+              }
+
+              else if(data.task != 0){
+              var task = {id:counter(), title: data.task, status: 0}
+              self.taskList.push(task)
+              alert("You are creating a new task..Tick to continue")
+              }
+              
+              
+            }
+          }
+        ]
+      })
+
+    },
+
+
+    edit(id) {
+      var self = this
+      // var task = _.find(this.taskList, {id:id})
+      var task = {}
+      this.taskList.forEach(function(el) {
+        if (el.id === id) {
+          task = el
+        }
+      })
+
+      Dialog.create({
+        title: 'Edit task',
+        form: {
+          task: {
+            type: 'textbox',
+            label: 'Edit Task',
+            model: task.title
+          }
+        },
+
+        buttons: [
+          'Delete',
+          {
+            label: 'Update',
+            handler(data) {
+                if(data.task == 0){
+                alert("Warning!!!...You are trying to submit an empty field")
+              }
+               
+               else if(data.task != 0){
+              task.title = data.task
+              self.taskList.push(task)
+               alert("You are updating..Tick to continue")
+              }
+              
+              
+            }
+          }
+        ]
+      })
+    },
+
+    deleteItem(id) {
+      var self = this
+      var task = {}
+      this.taskList.forEach(function(el) {
+        if(el.id == id){
+          task = el
+          self.taskList.splice(self.taskList.indexOf(task),1)
+          }
+          
+      })
+    
+    } 
+    },
+  mounted() {
   }
-  
+}
+
 </script>
