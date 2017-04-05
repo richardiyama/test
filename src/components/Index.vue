@@ -11,9 +11,9 @@
     </div>
   
     <div class="layout-view">
+    <q-search class="orange"  v-model="searchModel"></q-search>
       <div class="list">
-        <div v-for="i in filteredTasks()" :key="i.id"
-          class="item">
+        <div v-for="i in filteredTasks()" :key="i.id" class="item">
 
           <i class="item-primary">lightbulb_outline</i>
           <div class="item-content has-secondary">
@@ -43,7 +43,7 @@
 
 <script>
 import _ from 'lodash'
-import Quasar, { Utils, Dialog } from 'quasar'
+import Quasar, { Utils, Dialog,LocalStorage } from 'quasar'
 
 var lastCount = 0 
 function counter () {
@@ -54,15 +54,17 @@ function counter () {
 export default {
   data() {
     return {
-      search: '',
-      taskList: [],
+      searchs: '',
+      taskList: LocalStorage.get.item('tasks',[]),
+      searchModel: ""
+    
     }
   },
 
 
   methods: {
     filteredTasks() {
-      if (this.search.length > 0) {
+      if (this.searchs.length > 0) {
         retv = _.filter(this.taskList, { label: this.searchModel })
         return retv
       }
@@ -95,6 +97,7 @@ export default {
               else if(data.task != 0){
               var task = {id:counter(), title: data.task, status: 0}
               self.taskList.push(task)
+              LocalStorage.set('tasks',self.taskList)
               alert("You are creating a new task..Tick to continue")
               }
               
@@ -105,7 +108,6 @@ export default {
       })
 
     },
-
 
     edit(id) {
       var self = this
@@ -138,7 +140,9 @@ export default {
                
                else if(data.task != 0){
               task.title = data.task
-              self.taskList.push(task)
+               LocalStorage.set('tasks', self.taskList)
+              //self.taskList.push(task.title)
+              //LocalStorage.set('tasks',task.title)
                alert("You are updating..Tick to continue")
               }
               
@@ -149,13 +153,17 @@ export default {
       })
     },
 
+
     deleteItem(id) {
       var self = this
       var task = {}
       this.taskList.forEach(function(el) {
         if(el.id == id){
           task = el
+          console.log(task)
           self.taskList.splice(self.taskList.indexOf(task),1)
+          LocalStorage.set('tasks', self.taskList)
+      
           }
           
       })
@@ -163,7 +171,11 @@ export default {
     } 
     },
   mounted() {
+
+    // create task store if not exist
+      if (LocalStorage.has('tasks') === false) {
+        LocalStorage.set('tasks', [])
   }
 }
-
+}
 </script>
