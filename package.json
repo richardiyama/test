@@ -21,7 +21,8 @@
     "roboto-fontface": "^0.6.0",
     "velocity-animate": "^1.2.3",
     "vue": "2.1.7",
-    "vue-router": "^2.0.0"
+    "vue-router": "^2.0.0",
+    "vuelidate": "^0.4.2"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
