@@ -64,18 +64,27 @@ export default {
     }
   },
 
+  
+
+
   computed: {
     filteredTasks: function () {
-    
+      function filter(arrayInTaskList, Searchterm) {
+        retv = [];
+        for (var i = 0; i < arrayInTaskList.length; i++) {
+          var title = arrayInTaskList[i]['title'].toLowerCase();
+          if (title.indexOf(Searchterm.toLowerCase()) != -1) {
+            retv.push(arrayInTaskList[i]);
+          }
+        }
+        return retv;
+      }
       if (this.search.length > 0) {
-        var retv = _.filter(this.taskList, { title: this.search})
-    
-        //console.log(matches_array)
-        return retv
-      
+        var retv = filter(this.taskList, this.search);
+        return retv;
       }
 
-      return this.taskList
+     return this.taskList
     }
 
   },
