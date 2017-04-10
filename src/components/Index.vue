@@ -11,7 +11,7 @@
     </div>
   
     <div class="layout-view">
-      <q-search class="orange" 
+      <q-search class="primary"
                 v-model="search"></q-search>
       <div class="list">
         <div v-for="i in filteredTasks"
@@ -24,21 +24,18 @@
           </div>
   
           <div class="item-secondary">
-            <i slot="target">
-                      more_vert
-                      <q-popover :ref="'popover'">
-                        <div class="list">
-                          <div class="item item-link" @click="edit(i.id)">
-                            <div class="item-content">Edit</div>
-                          </div>
-                          <div class="item item-link" @click="deleteItem(i.id)">
-                            <div class="item-content">Delete</div>
-                          </div>
-                        </div>
-                      </q-popover>
-                    </i>
-          </div>
-        </div>
+            <q-fab classNames="primary"
+                   icon="keyboard_arrow_left"
+                   direction="left"
+                    style="right: 18px; bottom: 18px;"
+                   >
+              <q-small-fab class="white"
+                           @click.native="edit(i.id)"
+                           icon="edit"></q-small-fab>
+              <q-small-fab class="white"
+                           @click.native="deleteItem(i.id)"
+                           icon="delete"></q-small-fab>
+            </q-fab>
       </div>
     </div>
   </q-layout>
@@ -59,12 +56,12 @@ export default {
     return {
       search: '',
       taskList: LocalStorage.get.item('tasks', []),
-      
+
 
     }
   },
 
-  
+
 
 
   computed: {
@@ -84,13 +81,13 @@ export default {
         return retv;
       }
 
-     return this.taskList
+      return this.taskList
     }
 
   },
 
   methods: {
-     
+
     add() {
       var self = this
       Dialog.create({
@@ -104,7 +101,7 @@ export default {
         },
 
         buttons: [
-          'Delete',
+          'Cancel',
           {
             label: 'Create',
             preventClose: true,
@@ -152,7 +149,7 @@ export default {
         },
 
         buttons: [
-          'Delete',
+          'Cancel',
           {
             label: 'Update',
             preventClose: true,
@@ -177,17 +174,10 @@ export default {
 
     deleteItem(id) {
       var self = this
-      var task = {}
-      this.taskList.forEach(function (el) {
-        if (el.id == id) {
-          task = el
-          console.log(task)
-          self.taskList.splice(self.taskList.indexOf(task), 1)
-          LocalStorage.set('tasks', self.taskList)
-
-        }
-
-      })
+      var task = _.find(this.taskList, { id: id })
+      console.log(task)
+      self.taskList.splice(self.taskList.indexOf(task), 1)
+      LocalStorage.set('tasks', self.taskList)
 
     }
   },
