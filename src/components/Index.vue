@@ -5,9 +5,7 @@
       <q-toolbar-title :padding="1">
         Orb Solution Todo List
       </q-toolbar-title>
-      <button @click="add">
-        <i>note_add</i>
-      </button>
+      <a v-link="{ path: '/Add' }">Create Todo</a>
     </div>
   
     <div class="layout-view">
@@ -27,21 +25,24 @@
             <q-fab classNames="primary"
                    icon="keyboard_arrow_left"
                    direction="left"
-                    style="right: 18px; bottom: 18px;"
-                   >
+                   style="right: 18px; bottom: 18px;">
               <q-small-fab class="white"
-                           @click.native="edit(i.id)"
-                           icon="edit"></q-small-fab>
+                           <router-link
+                           :to="{params: {id: i.guid}}"
+                           icon="edit">Edit
+                </router-link>
+              </q-small-fab>
               <q-small-fab class="white"
                            @click.native="deleteItem(i.id)"
                            icon="delete"></q-small-fab>
             </q-fab>
-      </div>
-    </div>
+          </div>
+        </div>
   </q-layout>
 </template>
 
 <script>
+
 import _ from 'lodash'
 import Quasar, { Utils, Dialog, LocalStorage, Toast } from 'quasar'
 
@@ -86,90 +87,9 @@ export default {
 
   },
 
+
   methods: {
 
-    add() {
-      var self = this
-      Dialog.create({
-        title: 'New task',
-        form: {
-          task: {
-            type: 'textbox',
-            label: 'My task',
-            model: ''
-          }
-        },
-
-        buttons: [
-          'Cancel',
-          {
-            label: 'Create',
-            preventClose: true,
-
-            handler(data, close) {
-
-              if (data.task == 0) {
-                Toast.create('Warning!!!...You are trying to submit an empty field')
-                return
-              }
-              close(() => {
-                var task = { id: counter(), title: data.task, status: 0 }
-                self.taskList.push(task)
-                LocalStorage.set('tasks', self.taskList)
-
-              })
-
-
-
-            }
-          }
-        ]
-      })
-
-    },
-
-    edit(id) {
-      var self = this
-      // var task = _.find(this.taskList, {id:id})
-      var task = {}
-      this.taskList.forEach(function (el) {
-        if (el.id === id) {
-          task = el
-        }
-      })
-
-      Dialog.create({
-        title: 'Edit task',
-        form: {
-          task: {
-            type: 'textbox',
-            label: 'Edit Task',
-            model: task.title
-          }
-        },
-
-        buttons: [
-          'Cancel',
-          {
-            label: 'Update',
-            preventClose: true,
-            handler(data, close) {
-              if (data.task == 0) {
-                Toast.create('Warning!!!...You are trying to submit an empty field')
-                return
-              }
-
-              close(() => {
-                task.title = data.task
-                LocalStorage.set('tasks', self.taskList)
-              })
-
-
-            }
-          }
-        ]
-      })
-    },
 
 
     deleteItem(id) {
