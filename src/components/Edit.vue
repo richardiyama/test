@@ -14,7 +14,7 @@
             <br>
             <br>
             <div class="floating-label">
-                <input v-model="task"
+                <input v-model="title"
                        @keyup.enter="edit"
                        required
                        class="full-width">
@@ -45,45 +45,46 @@ import Quasar, { Utils, LocalStorage, Toast } from 'quasar'
 export default {
     data() {
         return {
-    
-            taskList: LocalStorage.get.item('tasks', []),
+            id: 0,
+            title: ''
         }
-
-
     },
 
-
-
-
-
     methods: {
-        edit: function (id) {
+        edit(id) {
             var self = this
-            // var task = _.find(this.taskList, {id:id})
-            var task = {}
-            this.taskList.forEach(function (el) {
-                if (el.id === id) {
-                    task = el
-                }
-            })
 
-            if (self.task == 0) {
+
+
+
+            var taskList = LocalStorage.get.item('tasks')
+            var task = _.find(taskList, { id: this.id })
+            console.log(id)
+            if (self.title === '') {
                 Toast.create('Warning!!!...You are trying to submit an empty field')
                 return
             }
 
+            if (task) {
+                console.log(self.title)
+                task.title = this.title
+                LocalStorage.set('tasks', taskList)
+                self.title = ""
+            }
 
-            task.title = self.task
-            LocalStorage.set('tasks', self.taskList)
 
         }
     },
 
     mounted() {
+        // console.log(this.$route.params.id)
 
-        // create task store if not exist
-        if (LocalStorage.has('tasks') === false) {
-            LocalStorage.set('tasks', [])
+        this.id = Number(this.$route.params.id)
+        var taskList = LocalStorage.get.item('tasks')
+        console.log(taskList)
+        var task = _.find(taskList, { id: this.id })
+        if (task) {
+            this.title = task.title
         }
     }
 }

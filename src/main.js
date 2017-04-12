@@ -9,7 +9,6 @@ import router from './router'
 Vue.use(Quasar) 
 
 Quasar.start(() => {
-  
   new Vue({
     el: '#q-app',
     router,

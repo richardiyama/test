@@ -23,8 +23,6 @@ export default new VueRouter({
   routes: [
     { path: '/', component: load('Index') }, // Default
     { path: '/Add', component: load('Add') },
-    { path: '/Edit', component: load('Edit') },
-    { path: '/:id', component: load('Edit') },
-    { path: '*', component: load('Error404') } // Not found
+    { path: '/edit/:id', component: load('Edit') } // Not found
   ]
 })

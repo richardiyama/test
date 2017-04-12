@@ -76,7 +76,7 @@ export default {
             })
             console.log(self.taskList)
             LocalStorage.set('tasks', self.taskList)
-            self.task =""
+            self.task = ""
 
         }
 

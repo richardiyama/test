@@ -5,13 +5,13 @@
       <q-toolbar-title :padding="1">
         Orb Solution Todo List
       </q-toolbar-title>
-      <a v-link="{ path: '/Add' }">Create Todo</a>
     </div>
   
     <div class="layout-view">
       <q-search class="primary"
                 v-model="search"></q-search>
       <div class="list">
+      <center> <a v-link="{ path: '/Add' }">Create Todo</a> </center>
         <div v-for="i in filteredTasks"
              :key="i.id"
              class="item">
@@ -27,14 +27,12 @@
                    direction="left"
                    style="right: 18px; bottom: 18px;">
               <q-small-fab class="white"
-                           <router-link
-                           :to="{params: {id: i.guid}}"
-                           icon="edit">Edit
-                </router-link>
-              </q-small-fab>
+                           icon="edit"
+                           @click.native="onEdit(i.id)"></q-small-fab>
               <q-small-fab class="white"
                            @click.native="deleteItem(i.id)"
-                           icon="delete"></q-small-fab>
+                           icon="delete">
+              </q-small-fab>
             </q-fab>
           </div>
         </div>
@@ -62,9 +60,6 @@ export default {
     }
   },
 
-
-
-
   computed: {
     filteredTasks: function () {
       function filter(arrayInTaskList, Searchterm) {
@@ -89,8 +84,10 @@ export default {
 
 
   methods: {
-
-
+    onEdit(id) {
+      console.log("edit:", id)
+      this.$router.push(`/edit/${id}`)
+    },
 
     deleteItem(id) {
       var self = this
