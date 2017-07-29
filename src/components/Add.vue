@@ -78,6 +78,7 @@ export default {
                 title: self.task,
                 status: 0
             })
+            
             console.log(self.taskList)
             LocalStorage.set('tasks', self.taskList)
             self.task = ""
