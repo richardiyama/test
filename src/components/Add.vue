@@ -50,6 +50,7 @@ import _ from 'lodash'
 import Quasar, { Utils, Dialog, LocalStorage, Toast } from 'quasar'
 
 var lastCount = 0
+
 function counter() {
     lastCount += 1
     return lastCount
