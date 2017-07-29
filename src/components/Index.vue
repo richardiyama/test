@@ -11,7 +11,8 @@
       <q-search class="primary"
                 v-model="search"></q-search>
       <div class="list">
-      <center> <a v-link="{ path: '/Add' }">Create Todo</a> </center>
+      <center> 
+      <a v-link="{ path: '/Add' }">Create Todo</a> </center>
         <div v-for="i in filteredTasks"
              :key="i.id"
              class="item">
