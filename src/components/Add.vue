@@ -56,6 +56,7 @@ function counter() {
     return lastCount
 }
 
+
 export default {
     data() {
         return {
