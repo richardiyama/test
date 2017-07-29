@@ -6,6 +6,7 @@ import Vue from 'vue'
 import Quasar from 'quasar'
 import router from './router'
 
+
 Vue.use(Quasar) 
 
 Quasar.start(() => {
