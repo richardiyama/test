@@ -38,7 +38,8 @@
             </q-fab>
           </div>
         </div>
-  </q-layout>
+ 
+ </q-layout>
 </template>
 
 <script>
