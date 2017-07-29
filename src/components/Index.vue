@@ -102,6 +102,7 @@ export default {
 
     }
   },
+  
   mounted() {
 
     // create task store if not exist
