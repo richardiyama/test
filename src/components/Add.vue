@@ -3,7 +3,6 @@
         <div slot="header"
              class="toolbar">
     
-            
             <q-toolbar-title :padding="1">
                 Add Todo
             </q-toolbar-title>
