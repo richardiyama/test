@@ -60,8 +60,7 @@ export default {
         return {
             task: "",
             taskList: LocalStorage.get.item('tasks', []),
-
-        }
+}
     },
 
     methods: {
