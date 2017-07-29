@@ -1,6 +1,7 @@
 <template>
     <q-layout>
-        <div slot="header"
+       
+       <div slot="header"
              class="toolbar">
     
             <q-toolbar-title :padding="1">
