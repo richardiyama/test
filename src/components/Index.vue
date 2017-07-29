@@ -36,6 +36,7 @@
                            @click.native="deleteItem(i.id)"
                            icon="delete">
               </q-small-fab>
+            
             </q-fab>
           </div>
         </div>
