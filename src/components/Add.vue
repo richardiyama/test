@@ -6,7 +6,8 @@
             <q-toolbar-title :padding="1">
                 Add Todo
             </q-toolbar-title>
-        </div>
+       
+       </div>
         <div class="layout-view">
             <br>
             <br>
